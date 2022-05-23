@@ -43,6 +43,7 @@ function addStudentData(student) {
     gpaElem.innerHTML = student.gpa
     let profileElem = document.getElementById('image')
     profileElem.setAttribute('src', student.image)
+    profileElem.setAttribute('width', '80em')
 
 }
 var count = 1;
