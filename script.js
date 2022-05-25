@@ -81,16 +81,24 @@ function addTable(index, student) {
     button.setAttribute('type', 'button')
     button.innerText = 'delete'
     button.addEventListener('click', function () {
-        deleteStudent(student.id)
-        showAllStudent()
+        let confirmButton = confirm(`ท่านต้องการลบคุณ ${student.name} หรือไม่`)
+        if (confirmButton) {
+            deleteStudent(student.id)
+        }
     })
     cell.appendChild(button)
+    row.addEventListener('click', function () {
+        showStudentBlocks(student)
+    })
     row.appendChild(cell)
+
     tableBody.appendChild(row)
 }
 
 function addStudentList(studentList) {
     let counter = 1
+    const tableBody = document.getElementById('inputTable')
+    tableBody.innerHTML = ''
     for (student of studentList) {
         addTable(counter++, student);
     }
@@ -104,9 +112,13 @@ document.getElementById('searchButton').addEventListener('click', () => {
         .then(response => {
             return response.json()
         }).then(student => {
-            addStudentData(student)
+            showStudentBlocks(student)
         })
 })
+
+function OnLoad() {
+    showAllStudentBlock()
+}
 
 function addStudentToDB(student) {
     fetch(`https://dv-student-backend-2019.appspot.com/students`, {
@@ -119,7 +131,7 @@ function addStudentToDB(student) {
         return response.json()
     }).then(data => {
         console.log('success', data)
-        showStudentBlocks(data)
+        showAllStudent()
     })
 }
 
@@ -134,6 +146,7 @@ function deleteStudent(id) {
         }
     }).then(data => {
         alert(`student name ${data.name} is now deleted`)
+        showAllStudent()
     }).catch(error => {
         alert('your input student id is not in the database')
     })
@@ -157,9 +170,38 @@ function showAllStudent() {
             addStudentList(data)
         })
 }
+
 var singleStudentResult = document.getElementById('sinigle_student_result')
+var listStudentResult = document.getElementById('output')
+var addUserDetails = document.getElementById('formAddStudent')
+
+function hideAll() {
+    singleStudentResult.style.display = 'none'
+    listStudentResult.style.display = 'none'
+    addUserDetails.style.display = 'none'
+}
+
+document.getElementById('allStudentMenu').addEventListener('click', (event) => {
+    showAllStudentBlock()
+
+})
+
+document.getElementById('addStudentMenu').addEventListener('click', (event) => {
+    hideAll()
+    addUserDetails.style.display = 'block'
+})
 
 function showStudentBlocks(student) {
+    hideAll()
     singleStudentResult.style.display = 'block'
     addStudentData(student)
 }
+
+function showAllStudentBlock() {
+    hideAll()
+    listStudentResult.style.display = 'block'
+    showAllStudent()
+}
+
+
+
