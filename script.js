@@ -43,7 +43,6 @@ function addStudentData(student) {
     gpaElem.innerHTML = student.gpa
     let profileElem = document.getElementById('image')
     profileElem.setAttribute('src', student.image)
-    profileElem.setAttribute('width', '80em')
 
 }
 var count = 1;
@@ -57,6 +56,9 @@ function addTable(index, student) {
 
     cell = document.createElement('td')
     cell.innerHTML = `${student.name} ${student.surname}`
+    cell.addEventListener('click', function () {
+        showStudentBlocks(student)
+    })
     row.appendChild(cell)
 
     cell = document.createElement('td')
@@ -87,13 +89,31 @@ function addTable(index, student) {
         }
     })
     cell.appendChild(button)
-    row.addEventListener('click', function () {
-        showStudentBlocks(student)
-    })
     row.appendChild(cell)
 
+    cell = document.createElement('td')
+    button = document.createElement('button')
+    button.classList.add('btn')
+    button.classList.add('btn-primary')
+    button.setAttribute('type', 'button')
+    button.innerText = 'Edit'
+    button.addEventListener('click', function () {
+        addUserDetails.style.display = 'block'
+        addButton.style.display = 'none'
+        editidInput.style.display = 'none'
+        editaddButton.style.display = 'block'
+        document.getElementById('editidInput').value = student.id
+        document.getElementById('nameInput').value = student.name
+        document.getElementById('surnameInput').value = student.surname
+        document.getElementById('studentIdInput').value = student.id
+        document.getElementById('gpaInput').value = student.gpa
+        document.getElementById('imageLinkInput').value = student.image
+    })
+    cell.appendChild(button)
+    row.appendChild(cell)
     tableBody.appendChild(row)
 }
+
 
 function addStudentList(studentList) {
     let counter = 1
@@ -112,7 +132,7 @@ document.getElementById('searchButton').addEventListener('click', () => {
         .then(response => {
             return response.json()
         }).then(student => {
-            showStudentBlocks(student)
+            addStudentData(student)
         })
 })
 
@@ -135,6 +155,22 @@ function addStudentToDB(student) {
     })
 }
 
+function EditStudentToDB(student) {
+    fetch(`https://dv-student-backend-2019.appspot.com/students`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(student)
+    }).then(response => {
+        return response.json()
+    }).then(data => {
+        console.log('success', data)
+        showAllStudent()
+    })
+}
+
+
 function deleteStudent(id) {
     fetch(`https://dv-student-backend-2019.appspot.com/student/${id}`, {
         method: 'DELETE'
@@ -151,6 +187,17 @@ function deleteStudent(id) {
         alert('your input student id is not in the database')
     })
 }
+function onEditStudentClick() {
+    let student = {}
+    student.id = document.getElementById('editidInput').value
+    student.name = document.getElementById('nameInput').value
+    student.surname = document.getElementById('surnameInput').value
+    student.studentId = document.getElementById('studentIdInput').value
+    student.gpa = document.getElementById('gpaInput').value
+    student.image = document.getElementById('imageLinkInput').value
+    console.log(student.id)
+    EditStudentToDB(student)
+}
 
 function onAddStudentClick() {
     let student = {}
@@ -159,6 +206,7 @@ function onAddStudentClick() {
     student.studentId = document.getElementById('studentIdInput').value
     student.gpa = document.getElementById('gpaInput').value
     student.image = document.getElementById('imageLinkInput').value
+    console.log(student.id)
     addStudentToDB(student)
 }
 
@@ -174,6 +222,12 @@ function showAllStudent() {
 var singleStudentResult = document.getElementById('sinigle_student_result')
 var listStudentResult = document.getElementById('output')
 var addUserDetails = document.getElementById('formAddStudent')
+var addButton = document.getElementById('addButton')
+var editaddButton = document.getElementById('editaddButton')
+var editidInput = document.getElementById('editidInput')
+
+
+
 
 function hideAll() {
     singleStudentResult.style.display = 'none'
@@ -188,7 +242,15 @@ document.getElementById('allStudentMenu').addEventListener('click', (event) => {
 
 document.getElementById('addStudentMenu').addEventListener('click', (event) => {
     hideAll()
+    editaddButton.style.display = 'none'
+    addButton.style.display = 'block'
     addUserDetails.style.display = 'block'
+    document.getElementById('editidInput').value = ''
+    document.getElementById('nameInput').value = ''
+    document.getElementById('surnameInput').value = ''
+    document.getElementById('studentIdInput').value = ''
+    document.getElementById('gpaInput').value = ''
+    document.getElementById('imageLinkInput').value = ''
 })
 
 function showStudentBlocks(student) {

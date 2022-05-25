@@ -30,9 +30,9 @@
       </ul>
 
       <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-        <input type="search" class="form-control" placeholder="SearchID..." aria-label="Search" id="inputText">
+        <input type="search" class="form-control" placeholder="Search..." aria-label="Search" id="inputText">
       </form>
-      <button type="button" class="btn btn-light text-dark me-2" id="searchButton">Search Id</button>
+      <button type="button" class="btn btn-light text-dark me-2" id="searchButton">Search</button>
       <button type="button" class="btn btn-primary">
         กดมาแล้ว <span class="badge bg-danger" id="count">0</span>
         <span class="visually-hidden">unread messages</span>
@@ -89,6 +89,41 @@
       </div>
     </form>
   </div>
+  <div id="formAddStudent">
+    <div class="d-flex justify-content-center my-3">
+      <form class="row gy-2 gx-3 align-items-center">
+        <div class="form-floating">
+          <input type="text" class="form-control" id="editidInput" placeholder="id">
+          <label for="id">id</label>
+        </div>
+        <div class="form-floating">
+          <input type="text" class="form-control" id="nameInput" placeholder="ชื่อ">
+          <label for="nameInput">Name</label>
+        </div>
+        <div class="form-floating">
+          <input type="text" class="form-control" id="surnameInput" placeholder="นามสกุล">
+          <label for="surnameInput">Surname</label>
+        </div>
+        <div class="form-floating">
+          <input type="text" class="form-control" id="studentIdInput" placeholder="รหัสศึกษา">
+          <label for="studentIdInput">รหัสศึกษา</label>
+        </div>
+        <div class="form-floating">
+          <input type="text" class="form-control" id="gpaInput" placeholder="gpa">
+          <label for="gpaInput">GPA</label>
+        </div>
+        <div class="form-floating">
+          <input type="text" class="form-control" id="imageLinkInput" placeholder="image Link">
+          <label for="imageLinkInput">Link รูป</label>
+        </div>
+        <div class="col-auto">
+          <button type="button" class="btn btn-primary" id="addButton" onclick="onEditStudentClick()">Submit</button>
+          <button type="button" class="btn btn-primary" id="editaddButton" onclick="onEditStudentClick()">Submit
+            Edit</button>
+        </div>
+      </form>
+    </div>
+  </div>
   <div id="output">
     <table class="table table-striped">
       <thead>
@@ -98,6 +133,7 @@
           <th scope="col">รหัส</th>
           <th scope="col">GPA</th>
           <th scope="col">ลบ</th>
+          <th scope="col">Edit</th>
         </tr>
       </thead>
       <tbody id="inputTable">
@@ -129,36 +165,8 @@
       </div>
     </div>
   </div>
-  <div id="formAddStudent">
-    <div class="d-flex justify-content-center my-3">
-      <form class="row gy-2 gx-3 align-items-center">
-        <div class="form-floating">
-          <input type="text" class="form-control" id="nameInput" placeholder="ชื่อ">
-          <label for="nameInput">Name</label>
-        </div>
-        <div class="form-floating">
-          <input type="text" class="form-control" id="surnameInput" placeholder="นามสกุล">
-          <label for="surnameInput">Surname</label>
-        </div>
-        <div class="form-floating">
-          <input type="text" class="form-control" id="studentIdInput" placeholder="รหัสศึกษา">
-          <label for="studentIdInput">รหัสศึกษา</label>
-        </div>
-        <div class="form-floating">
-          <input type="text" class="form-control" id="gpaInput" placeholder="gpa">
-          <label for="gpaInput">GPA</label>
-        </div>
-        <div class="form-floating">
-          <input type="text" class="form-control" id="imageLinkInput" placeholder="image Link">
-          <label for="imageLinkInput">Link รูป</label>
-        </div>
-        <div class="col-auto">
-          <button type="button" class="btn btn-primary" id="addButton" onclick="onAddStudentClick()">Submit</button>
-        </div>
-      </form>
-    </div>
 
-  </div>
+
 
 
   <!-- Option 1: Bootstrap Bundle with Popper -->
