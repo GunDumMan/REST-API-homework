@@ -56,18 +56,7 @@ function addTable(index, student) {
     row.appendChild(cell)
 
     cell = document.createElement('td')
-
-    cell.innerHTML = `${student.name} ${student.surname} [detail Click]`
-    row.addEventListener('click', () => {
-        let id = student.id
-        console.log(id)
-        fetch(`https://dv-student-backend-2019.appspot.com/student/${id}`)
-            .then(response => {
-                return response.json()
-            }).then(student => {
-                addStudentData(student)
-            })
-    })
+    cell.innerHTML = `${student.name} ${student.surname}`
     row.appendChild(cell)
 
     cell = document.createElement('td')
@@ -85,6 +74,18 @@ function addTable(index, student) {
     cell.innerHTML = student.gpa
     row.appendChild(cell)
 
+    cell = document.createElement('td')
+    let button = document.createElement('button')
+    button.classList.add('btn')
+    button.classList.add('btn-danger')
+    button.setAttribute('type', 'button')
+    button.innerText = 'delete'
+    button.addEventListener('click', function () {
+        deleteStudent(student.id)
+        showAllStudent()
+    })
+    cell.appendChild(button)
+    row.appendChild(cell)
     tableBody.appendChild(row)
 }
 
@@ -93,14 +94,6 @@ function addStudentList(studentList) {
     for (student of studentList) {
         addTable(counter++, student);
     }
-}
-
-function onload() {
-    fetch('https://dv-student-backend-2019.appspot.com/students').then(response => {
-        return response.json().then(data => {
-            addStudentList(data)
-        })
-    })
 }
 
 
@@ -113,4 +106,60 @@ document.getElementById('searchButton').addEventListener('click', () => {
         }).then(student => {
             addStudentData(student)
         })
-}) 
+})
+
+function addStudentToDB(student) {
+    fetch(`https://dv-student-backend-2019.appspot.com/students`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(student)
+    }).then(response => {
+        return response.json()
+    }).then(data => {
+        console.log('success', data)
+        showStudentBlocks(data)
+    })
+}
+
+function deleteStudent(id) {
+    fetch(`https://dv-student-backend-2019.appspot.com/student/${id}`, {
+        method: 'DELETE'
+    }).then(response => {
+        if (response.status === 200) {
+            return response.json()
+        } else {
+            throw Error(response.statusText)
+        }
+    }).then(data => {
+        alert(`student name ${data.name} is now deleted`)
+    }).catch(error => {
+        alert('your input student id is not in the database')
+    })
+}
+
+function onAddStudentClick() {
+    let student = {}
+    student.name = document.getElementById('nameInput').value
+    student.surname = document.getElementById('surnameInput').value
+    student.studentId = document.getElementById('studentIdInput').value
+    student.gpa = document.getElementById('gpaInput').value
+    student.image = document.getElementById('imageLinkInput').value
+    addStudentToDB(student)
+}
+
+function showAllStudent() {
+    fetch(`https://dv-student-backend-2019.appspot.com/students`)
+        .then(response => {
+            return response.json()
+        }).then(data => {
+            addStudentList(data)
+        })
+}
+var singleStudentResult = document.getElementById('sinigle_student_result')
+
+function showStudentBlocks(student) {
+    singleStudentResult.style.display = 'block'
+    addStudentData(student)
+}
